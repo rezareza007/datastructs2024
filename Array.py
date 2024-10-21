@@ -26,7 +26,7 @@ class Array:
         
     def get_at(self, index): 
         assert index >= 0 and index < len(self), "Array subscript out of range"
-        return self._elements[ index ] # O(1)
+        return self._elements[index] # O(1)
         
 
     def set_at(self, index, value): 
@@ -36,14 +36,14 @@ class Array:
     def _copy_forward(self, i, n, A, j): # O(n)
         """Copies self._elements[i:i+n] to A[j:j+n]."""
         for k in range(n):
-            A[j + k] = self._elements[i + k]
+            A.set_at(j + k , self._elements[i + k])
 
     def _copy_backward(self, i, n, A, j): # O(n)
         """ Copies self._elements[i:i+n] to A[j:j+n] starting from the 
         last element and moving backwards.
         """
         for k in range(n - 1, -1, -1):
-            A[j + k] = self._elements[i + k]
+            A.set_at(j + k, self._elements[i + k])
 
     def insert_at(self, i, x): # O(n)
         n = len(self)
@@ -70,20 +70,20 @@ class Array:
 
 
    # Gets the contents of the index element.
-    def __getitem__( self, index ):
-        return self.get_at(self,index)
+   # def __getitem__( self, index ):
+   #     return self.get_at(self,index)
    
  
 
    # Puts the value in the array element at index position.
-    def __setitem__( self, index, value ):
-        return self.set_at( self, index, value )
+   # def __setitem__( self, index, value ):
+   #     return self.set_at( self, index, value )
       
 
    # Clears the array by setting each element to the given value.
     def clear( self, value ):
       for i in range( len(self) ) :
-         self._elements[i] = value
+         self._elements.set_at(i , value)
 
    # Returns the array's iterator for traversing the elements.
       #def __iter__( self ):
@@ -93,7 +93,7 @@ class Array:
 
 
 
-class Dynamic_Array(Array):
+class Dynamic_Array:
     def __init__(self, r = 2): # O(1)
         super().__init__()
         self._elements=Array()
@@ -105,10 +105,21 @@ class Dynamic_Array(Array):
     def __len__(self): return self._size # O(1)
 
     def __iter__(self): # O(n)
-        for i in range(len(self)): yield self._elements[i]
+        for i in range(len(self)): yield self._elements.get_at(i)
+
+
+    def get_at(self, index): 
+        assert index >= 0 and index < len(self), "Array subscript out of range"
+        return self._elements.get_at(index) # O(1)
+        
+
+    def set_at(self, index, value): 
+       assert index >= 0 and index < len(self), "Array subscript out of range"
+       self._elements.set_at( index ,value )   # O(1)    
     
     def build(self, X): # O(n)
         for a in X: self.insert_last(a)
+        
     
     def _compute_bounds(self): # O(1)
         self.upper = len(self._elements)   # The current capacity of the dynamic array
@@ -122,28 +133,28 @@ class Dynamic_Array(Array):
         
         m = max(n, 1) * self.r # New capacity
         A = Array(m)
-        self._copy_forward(0, self._size, A, 0)
+        self._elements._copy_forward(0, self._size, A, 0)
         self._elements = A
         self._compute_bounds()
     
     def insert_last(self, x): # O(1)a
         self._resize(self._size + 1)
-        self._elements[self._size] = x
-        self.size += 1
+        self._elements.set_at(self._size, x)
+        self._size += 1
     
     def delete_last(self): # O(1)a
-        self._elements[self._size - 1] = None
-        self.size -= 1
+        self._elements.set_at(self._size - 1 , None)
+        self._size -= 1
         self._resize(self._size)
     
     def insert_at(self, i, x): # O(n)
         self.insert_last(None)
-        self._copy_backward(i, self._size - (i + 1), self._elements, i + 1)
+        self._elements._copy_backward(i, self._size - (i + 1), self._elements, i + 1)
         self.A[i] = x
     
     def delete_at(self, i): # O(n)
-        x = self._elements[i]
-        self._copy_forward(i + 1, self._size - (i + 1), self._elements, i)
+        x = self._elements.get_at(i)
+        self._elements._copy_forward(i + 1, self._size - (i + 1), self._elements, i)
         self.delete_last()
         return x # O(n)
 
