@@ -22,9 +22,9 @@ Course notes are published as jupyter notebooks on Github.
 – Basic discrete mathematics (induction, recursions, etc)
 
 **Course evaluation:**  
-– In-class problem solving (40 minutes a week, 5 points)  
-– Coding project and presentation (4 points). Projects must be in for of a jupyter notebook. Please check the subject of your project with me in advance.  
-– Written exam (11 points)
+– Homework (2 points)  
+– Midterm (10 points). The midterm includes chapters 0 to 7.  
+– Final exam (8 points)
 
 **Course syllabus**
 
